@@ -1,4 +1,14 @@
-export default function Home() {
+import {fetch_result, fetchTodayYesterdayResult} from "./api/chart.js"
+
+export default async function Home() {
+
+  // const response = await fetch_result('SHREE_GANESH');
+  const sg = await fetchTodayYesterdayResult('SHREE_GANESH').then((res)=>res.json());
+  const gb = await fetchTodayYesterdayResult('GHAZIABAD').then((res)=>res.json());
+  const fd = await fetchTodayYesterdayResult('FARIDABAD').then((res)=>res.json());
+
+  const data = [sg, gb, fd];
+  console.log(data)
   const results = [
     { name: "JAY BHOLE", time: "01:15 AM", yesterday: "08", today: "01" },
     { name: "BIKANER SUPER", time: "02:20 AM", yesterday: "17", today: "33" },
@@ -12,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col items-center px-4 py-6">
-      <HeroSection />
+      <HeroSection gb={34} hb={22} />
       {/* Header */}
       <div className="w-full max-w-3xl text-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800">SATTA KING</h1>
@@ -23,7 +33,7 @@ export default function Home() {
 
       {/* Cards */}
       <div className="w-full max-w-3xl flex flex-col gap-4">
-        {results.map((item, index) => (
+        {data.map((item, index) => (
           <div
             key={index}
             className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col gap-3"
@@ -31,10 +41,10 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
                 <h2 className="font-semibold text-slate-800">
-                  {item.name}
+                  {item.game}
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Time: {item.time}
+                  Time: {item?.time}
                 </p>
               </div>
 
@@ -64,7 +74,7 @@ export default function Home() {
 
 
 
-export function HeroSection() {
+export function HeroSection({hb, gb}) {
   const navItems = [
     { label: "SATTA KING", active: true },
     { label: "RECORD CHART" },
@@ -217,7 +227,7 @@ export function HeroSection() {
           </p>
 
           <p className="text-yellow-400 text-2xl font-extrabold">
-            73
+            {hb}
           </p>
 
           <p className="text-emerald-400 text-xl font-bold">
@@ -225,7 +235,7 @@ export function HeroSection() {
           </p>
 
           <p className="text-yellow-400 text-lg font-semibold">
-            Wait
+            {gb}
           </p>
         </div>
       </div>
