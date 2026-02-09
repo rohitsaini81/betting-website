@@ -1,18 +1,53 @@
-import {fetch_result, fetch_result_by_month, fetchTodayYesterdayResult} from "./api/chart.js"
+import {fetch_result_by_month, fetchTodayYesterdayResult, fetchGames} from "./api/chart.js"
 
 export default async function Home() {
 
-  // const response = await fetch_result('SHREE_GANESH');
-  const sg = await fetchTodayYesterdayResult('SHREE_GANESH').then((res)=>res.json());
-  const gb = await fetchTodayYesterdayResult('GHAZIABAD').then((res)=>res.json());
-  const fd = await fetchTodayYesterdayResult('FARIDABAD').then((res)=>res.json());
+  const games = await fetchGames().then((res) => res.json());
+  const gameCodes = (games || []).map((game) => game.code);
+  const results = await Promise.all(
+    gameCodes.map((code) =>
+      fetchTodayYesterdayResult(code).then((res) => res.json())
+    )
+  );
+  const gameNameMap = Object.fromEntries(
+    (games || []).map((game) => [game.code, game.formal_name || game.code])
+  );
+  const resultMap = Object.fromEntries(
+    results.map((row) => [row.game, row])
+  );
+  const todayResults = results.filter((row) => row?.today != null);
+  const firstToday = todayResults[0];
+  const secondToday = todayResults[1];
+
+  const sg = resultMap.SHREE_GANESH || {
+    game: "SHREE_GANESH",
+    today: null,
+    yesterday: null,
+  };
+  const gb = resultMap.GHAZIABAD || {
+    game: "GHAZIABAD",
+    today: null,
+    yesterday: null,
+  };
+  const fd = resultMap.FARIDABAD || {
+    game: "FARIDABAD",
+    today: null,
+    yesterday: null,
+  };
   const january = await fetch_result_by_month('', 2026, 1).then(data=>data.json())
   
   const data = [sg, gb, fd];
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col items-center px-4 py-6">
-      <HeroSection gb={gb.today || "WAIT"} hb={"WAIT"} />
+      <HeroSection
+        firstGameName={firstToday?.game ? gameNameMap[firstToday.game] : "HYDERABAD"}
+        firstGameValue={firstToday?.today ?? "WAIT"}
+        secondGameName={
+          secondToday?.game ? gameNameMap[secondToday.game] : "GHAZIABAD"
+        }
+        secondGameValue={secondToday?.today ?? "WAIT"}
+      />
       {/* Header */}
       <div className="w-full max-w-3xl text-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800">SATTA KING</h1>
@@ -42,14 +77,14 @@ export default async function Home() {
                 <div className="flex flex-col items-center">
                   <span className="text-xs text-slate-400">Yesterday</span>
                   <span className="text-lg font-bold text-slate-700">
-                    {item.yesterday}
+                    {item.yesterday ?? "WAIT"}
                   </span>
                 </div>
 
                 <div className="flex flex-col items-center">
                   <span className="text-xs text-slate-400">Today</span>
                   <span className="text-lg font-bold text-emerald-600">
-                    {item.today}
+                    {item.today ?? "WAIT"}
                   </span>
                 </div>
               </div>
@@ -64,7 +99,12 @@ export default async function Home() {
 
 
 
-export function HeroSection({hb, gb}) {
+export function HeroSection({
+  firstGameName,
+  firstGameValue,
+  secondGameName,
+  secondGameValue,
+}) {
   const navItems = [
     { label: "SATTA KING", active: true },
     { label: "RECORD CHART" },
@@ -213,19 +253,19 @@ export function HeroSection({hb, gb}) {
           </p>
 
           <p className="text-emerald-400 text-xl font-bold">
-            HYDERABAD
+            {firstGameName}
           </p>
 
           <p className="text-yellow-400 text-2xl font-extrabold">
-            {hb}
+            {firstGameValue}
           </p>
 
           <p className="text-emerald-400 text-xl font-bold">
-            GHAZIABAD
+            {secondGameName}
           </p>
 
           <p className="text-yellow-400 text-lg font-semibold">
-            {gb}
+            {secondGameValue}
           </p>
         </div>
       </div>
@@ -347,5 +387,3 @@ export const december2025 = {
     { date: "25-12-2025", values: ["56", "69", "73", ""] },
   ],
 };
-
-
