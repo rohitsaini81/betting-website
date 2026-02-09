@@ -12,7 +12,7 @@ const password = process.env.PASSWORD;
 if (!password) {
   throw new Error("PG_PASSWORD environment variable is not set");
 }
-
+console.log("host : ",hostname)
 export const create = () => "Some data created";
 
 export const createConnection = async () => {
