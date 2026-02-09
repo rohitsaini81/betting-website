@@ -37,7 +37,7 @@ export async function loginAction(_prevState, formData) {
     sameSite: "lax",
     path: "/",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60,
+    maxAge: 60 * 60,
   });
 
   redirect("/admin");

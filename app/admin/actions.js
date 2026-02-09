@@ -1,6 +1,7 @@
 "use server";
 
 import { createGameResult } from "../lib/create.jsx";
+import { cookies } from "next/headers";
 
 const buildError = (message, fieldErrors = {}) => ({
   ok: false,
@@ -9,6 +10,12 @@ const buildError = (message, fieldErrors = {}) => ({
 });
 
 export async function submitGameResult(prevState, formData) {
+  const cookieStore = await cookies();
+  const isAuthed = cookieStore.get("admin_auth")?.value === "1";
+  if (!isAuthed) {
+    return buildError("Session expired. Please log in again.");
+  }
+
   const gameRaw = formData.get("game");
   const resultRaw = formData.get("result");
   const resultDateRaw = formData.get("result_date");

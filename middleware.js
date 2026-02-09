@@ -9,6 +9,10 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
+  if (request.headers.has("next-action")) {
+    return NextResponse.next();
+  }
+
   if (PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     const hasAuth = request.cookies.get("admin_auth")?.value === "1";
     if (!hasAuth) {
