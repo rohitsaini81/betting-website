@@ -1,4 +1,6 @@
 import {fetch_result_by_month, fetchTodayYesterdayResult, fetchGames} from "./api/chart.js"
+import Link from "next/link";
+import SignInPopup from "./components/signin-popup";
 
 export default async function Home() {
 
@@ -112,6 +114,7 @@ export default async function Home() {
           />
         </svg>
       </a>
+      <SignInPopup />
     </div>
   );
 }
@@ -125,9 +128,10 @@ export function HeroSection({
   secondGameValue,
 }) {
   const navItems = [
-    { label: "SATTA KING", active: true },
+    { label: "SATTA KING", href: "/", active: true },
     { label: "RECORD CHART" },
     { label: "SATTA CHART" },
+    { label: "PLAYIBLE ONLINE GAMES", href: "/playible-online-games" },
   ];
 
   return (
@@ -135,19 +139,37 @@ export function HeroSection({
 
       {/* Navbar */}
       <div className="w-full flex justify-center px-3 pt-3">
-        <div className="w-full max-w-6xl flex gap-2">
-          {navItems.map((item, index) => (
-            <button
-              key={index}
-              className={`flex-1 rounded-lg py-2 text-sm font-semibold transition
-                ${item.active
-                  ? "bg-blue-700"
-                  : "bg-blue-900/70 hover:bg-blue-800"
-                }`}
-            >
-              {item.label}
-            </button>
-          ))}
+        <div className="w-full max-w-6xl flex items-center gap-2">
+          <div className="flex flex-1 gap-2">
+            {navItems.map((item, index) => (
+              item.href ? (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className={`flex-1 rounded-lg py-2 text-center text-sm font-semibold transition
+                  ${item.active
+                    ? "bg-blue-700"
+                    : "bg-blue-900/70 hover:bg-blue-800"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={index}
+                  className="flex-1 rounded-lg bg-blue-900/70 py-2 text-sm font-semibold transition hover:bg-blue-800"
+                >
+                  {item.label}
+                </button>
+              )
+            ))}
+          </div>
+          <Link
+            href="/login"
+            className="shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
+          >
+            Sign In
+          </Link>
         </div>
       </div>
 
