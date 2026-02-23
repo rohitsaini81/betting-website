@@ -8,125 +8,99 @@ export default function SignupForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#f1f2f7] px-4 py-10">
+    <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-cyan-100 via-emerald-100 to-lime-100 px-4 py-10">
       <Link
         href="/"
         aria-label="Back to home"
-        className="absolute left-4 top-4 rounded-md border border-slate-300 bg-white px-3 py-1 text-sm text-slate-700 transition hover:bg-slate-50"
+        className="absolute left-4 top-4 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
       >
         ← Home
       </Link>
-      <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
-        <div className="grid md:grid-cols-2">
-          <div className="flex flex-col items-center justify-center bg-gradient-to-br from-emerald-500 to-cyan-500 px-6 py-10 text-center text-white">
-            <h2 className="text-3xl font-bold">Create Account</h2>
-            <p className="mt-2 text-sm text-white/90">Already have an account?</p>
-            <Link
-              href="/login"
-              className="mt-6 rounded-full border border-white px-6 py-2 text-sm font-semibold transition hover:bg-white hover:text-emerald-600"
-            >
+      <div className="w-full max-w-md rounded-2xl border border-emerald-200 bg-white p-6 shadow-xl shadow-emerald-200/50 sm:p-7">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-emerald-700">Sign Up</h1>
+          <p className="mt-1 text-sm text-slate-600">Create a new account</p>
+        </div>
+
+        <form className="flex flex-col gap-4">
+          <div>
+            <label className="text-sm font-semibold text-slate-700">Mobile Number</label>
+            <input
+              name="mobile"
+              autoComplete="tel"
+              inputMode="numeric"
+              placeholder="Type mobile number"
+              className="mt-1.5 w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold text-slate-700">Password</label>
+            <div className="relative mt-1.5">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Type password"
+                className="w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 pr-20 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded px-2 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold text-slate-700">Confirm Password</label>
+            <div className="relative mt-1.5">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirm_password"
+                placeholder="Type password again"
+                className="w-full rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 pr-20 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((value) => !value)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded px-2 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100"
+              >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 py-2.5 text-base font-semibold text-white transition hover:from-emerald-600 hover:to-cyan-600"
+          >
+            Create Account
+          </button>
+
+          <div className="my-1 border-t border-slate-200" />
+
+          <button
+            type="button"
+            className="rounded-lg border border-[#db4437] bg-[#db4437] py-2.5 text-sm font-semibold text-white transition hover:bg-[#c7372d]"
+          >
+            Continue with Google
+          </button>
+          <button
+            type="button"
+            className="rounded-lg border border-[#1877f2] bg-[#1877f2] py-2.5 text-sm font-semibold text-white transition hover:bg-[#1366cf]"
+          >
+            Continue with Facebook
+          </button>
+
+          <div className="mt-1 text-center text-sm text-slate-600">
+            Already registered?{" "}
+            <Link href="/login" className="font-semibold text-emerald-700 underline">
               Sign In
             </Link>
           </div>
-
-          <div className="p-6 sm:p-9">
-            <div className="mb-6 flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-slate-800">Sign Up</h1>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="h-9 w-9 rounded-full border border-slate-200 bg-white text-sm font-bold text-[#db4437] transition hover:bg-slate-50"
-                  aria-label="Sign up with Google"
-                >
-                  G
-                </button>
-                <button
-                  type="button"
-                  className="h-9 w-9 rounded-full border border-slate-200 bg-white text-sm font-bold text-[#1877f2] transition hover:bg-slate-50"
-                  aria-label="Sign up with Facebook"
-                >
-                  f
-                </button>
-              </div>
-            </div>
-
-            <form className="flex flex-col gap-4">
-              <div>
-                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Username
-                </label>
-                <input
-                  name="username"
-                  autoComplete="username"
-                  placeholder="Username"
-                  className="mt-2 w-full rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="Email address"
-                  className="mt-2 w-full rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Password
-                </label>
-                <div className="relative mt-2">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Password"
-                    className="w-full rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 pr-20 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-2 py-1 text-xs font-semibold text-emerald-600 hover:bg-emerald-50"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Confirm Password
-                </label>
-                <div className="relative mt-2">
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    name="confirm_password"
-                    placeholder="Confirm password"
-                    className="w-full rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 pr-20 text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((value) => !value)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-2 py-1 text-xs font-semibold text-emerald-600 hover:bg-emerald-50"
-                  >
-                    {showConfirmPassword ? "Hide" : "Show"}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="mt-1 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 py-2.5 font-semibold text-white transition hover:from-emerald-600 hover:to-cyan-600"
-              >
-                Create Account
-              </button>
-            </form>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   );
