@@ -9,9 +9,22 @@ export default function PlayibleOnlineGamesPage() {
     { name: "Carrom", href: null, highlighted: false },
     { name: "Chess", href: null, highlighted: false },
     {
+      name: "Number Guess",
+      href: "/playible-online-games/number-guess",
+      highlighted: true,
+      cta: "Play Number Guess",
+    },
+    {
+      name: "Color Guess",
+      href: "/playible-online-games/color-guess",
+      highlighted: true,
+      cta: "Play Color Guess",
+    },
+    {
       name: "Stake",
       href: "/playible-online-games/stake",
       highlighted: true,
+      cta: "Play Stake",
     },
   ];
 
@@ -47,7 +60,7 @@ export default function PlayibleOnlineGamesPage() {
                   href={game.href}
                   className="mt-3 inline-block rounded-md bg-amber-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-amber-600"
                 >
-                  Play Stake
+                  {game.cta || `Play ${game.name}`}
                 </Link>
               ) : null}
             </div>

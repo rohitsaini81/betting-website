@@ -34,14 +34,16 @@ function calculateMultiplier(minesCount, safeReveals) {
 
 export default function StakeGamePage() {
   const casinoGames = [
-    "Mines",
-    "Dice",
-    "Keno",
-    "Limbo",
-    "Plinko",
-    "Dragon Tower",
-    "Crash",
-    "Wheel",
+    { name: "Mines", href: "/playible-online-games/stake", active: true },
+    { name: "Number Guess", href: "/playible-online-games/number-guess" },
+    { name: "Color Guess", href: "/playible-online-games/color-guess" },
+    { name: "Dice" },
+    { name: "Keno" },
+    { name: "Limbo" },
+    { name: "Plinko" },
+    { name: "Dragon Tower" },
+    { name: "Crash" },
+    { name: "Wheel" },
   ];
 
   const [balance, setBalance] = useState(1000);
@@ -194,18 +196,18 @@ export default function StakeGamePage() {
             Casino Games
           </h2>
           <div className="space-y-2">
-            {casinoGames.map((gameName) => (
-              <button
-                key={gameName}
-                type="button"
-                className={`w-full rounded-md px-3 py-2 text-left text-sm font-semibold ${
-                  gameName === "Mines"
+            {casinoGames.map((game) => (
+              <Link
+                key={game.name}
+                href={game.href || "#"}
+                className={`block w-full rounded-md px-3 py-2 text-left text-sm font-semibold ${
+                  game.active
                     ? "bg-[#00e701] text-[#071824]"
                     : "bg-[#213743] text-slate-200 hover:bg-[#29414e]"
                 }`}
               >
-                {gameName}
-              </button>
+                {game.name}
+              </Link>
             ))}
           </div>
         </aside>
@@ -346,11 +348,11 @@ export default function StakeGamePage() {
             Other Games
           </h2>
           <div className="grid gap-2 text-sm">
+            <Link href="/playible-online-games/number-guess" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Number Guess</Link>
+            <Link href="/playible-online-games/color-guess" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Color Guess</Link>
             <button type="button" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Blackjack</button>
             <button type="button" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Roulette</button>
             <button type="button" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Slots</button>
-            <button type="button" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">HiLo</button>
-            <button type="button" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Baccarat</button>
           </div>
         </aside>
       </div>
