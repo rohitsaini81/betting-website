@@ -7,6 +7,7 @@ import { useMemo, useRef, useState } from "react";
 const GRID_SIDE = 5;
 const TOTAL_TILES = GRID_SIDE * GRID_SIDE;
 const HOUSE_EDGE = 0.97;
+const REVEAL_STEP_MS = 180;
 
 function createBoard(minesCount) {
   const mineIndexes = new Set();
@@ -55,6 +56,8 @@ export default function StakeGamePage() {
   const [statusText, setStatusText] = useState("Set bet and mines, then start.");
   const [currentBet, setCurrentBet] = useState(0);
   const [lastProfit, setLastProfit] = useState(0);
+  const [revealingTileIndex, setRevealingTileIndex] = useState(null);
+  const [revealStage, setRevealStage] = useState(0);
 
   const clickAudioRef = useRef(null);
   const bombAudioRef = useRef(null);
@@ -100,12 +103,14 @@ export default function StakeGamePage() {
     setBoard(createBoard(minesCount));
     setSafeReveals(0);
     setLastProfit(0);
+    setRevealingTileIndex(null);
+    setRevealStage(0);
     setGameActive(true);
     setStatusText("Round started. Pick a tile or cash out anytime.");
   };
 
   const cashOut = () => {
-    if (!gameActive || safeReveals <= 0) return;
+    if (!gameActive || safeReveals <= 0 || revealingTileIndex !== null) return;
     playAudio(clickAudioRef);
 
     const payout = Number(cashoutValue.toFixed(2));
@@ -117,13 +122,20 @@ export default function StakeGamePage() {
     playAudio(finalWinAudioRef);
   };
 
-  const onTileClick = (tileIndex) => {
-    if (!gameActive) return;
+  const onTileClick = async (tileIndex) => {
+    if (!gameActive || revealingTileIndex !== null) return;
 
     const clickedTile = board[tileIndex];
     if (!clickedTile || clickedTile.revealed) return;
 
     playAudio(clickAudioRef);
+    setRevealingTileIndex(tileIndex);
+    setRevealStage(1);
+    await new Promise((resolve) => setTimeout(resolve, REVEAL_STEP_MS));
+    setRevealStage(2);
+    await new Promise((resolve) => setTimeout(resolve, REVEAL_STEP_MS));
+    setRevealStage(0);
+    setRevealingTileIndex(null);
 
     if (clickedTile.isMine) {
       const explodedBoard = board.map((tile) =>
@@ -233,13 +245,16 @@ export default function StakeGamePage() {
                   const tile = board[tileIndex];
                   const revealed = Boolean(tile?.revealed);
                   const isMine = Boolean(tile?.isMine);
+                  const isAnimatingTile = revealingTileIndex === tileIndex;
+                  const showSparkleOne = isAnimatingTile && revealStage === 1;
+                  const showSparkleTwo = isAnimatingTile && revealStage === 2;
 
                   return (
                     <button
                       key={tileIndex}
                       type="button"
                       onClick={() => onTileClick(tileIndex)}
-                      disabled={!gameActive || revealed}
+                      disabled={!gameActive || revealed || revealingTileIndex !== null}
                       className={`relative flex aspect-square items-center justify-center overflow-hidden rounded-md border transition ${
                         revealed && isMine
                           ? "border-rose-400 bg-rose-950/80"
@@ -248,15 +263,23 @@ export default function StakeGamePage() {
                           : "border-[#2f4553] bg-[#213743] hover:border-[#557086] hover:bg-[#29414e] disabled:cursor-not-allowed"
                       }`}
                     >
-                      {!revealed ? (
+                      {showSparkleOne ? (
                         <Image
-                          src={tileIndex % 2 === 0 ? "/mine/sparkle_1.webp" : "/mine/sparkle_2.webp"}
-                          alt="tile"
+                          src="/mine/sparkle_1.webp"
+                          alt="sparkle"
                           width={72}
                           height={72}
                           className="h-12 w-12 opacity-90"
                         />
-                      ) : isMine ? (
+                      ) : showSparkleTwo ? (
+                        <Image
+                          src="/mine/sparkle_2.webp"
+                          alt="sparkle"
+                          width={72}
+                          height={72}
+                          className="h-12 w-12 opacity-90"
+                        />
+                      ) : !revealed ? null : isMine ? (
                         <Image
                           src="/mine/bomb.png"
                           alt="bomb"
@@ -317,7 +340,7 @@ export default function StakeGamePage() {
                 <button
                   type="button"
                   onClick={startRound}
-                  disabled={gameActive}
+                  disabled={gameActive || revealingTileIndex !== null}
                   className="rounded-md bg-[#00e701] px-4 py-2 font-semibold text-[#071824] hover:bg-[#4bff4f] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Start Round
@@ -325,7 +348,7 @@ export default function StakeGamePage() {
                 <button
                   type="button"
                   onClick={cashOut}
-                  disabled={!gameActive || safeReveals === 0}
+                  disabled={!gameActive || safeReveals === 0 || revealingTileIndex !== null}
                   className="rounded-md bg-[#f9a825] px-4 py-2 font-semibold text-[#071824] hover:bg-[#fbbf24] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Cash Out {cashoutValue > 0 ? `(${cashoutValue.toFixed(2)})` : ""}
