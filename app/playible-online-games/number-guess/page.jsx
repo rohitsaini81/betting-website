@@ -112,7 +112,7 @@ export default function NumberGuessGamePage() {
       </header>
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 md:flex-row md:items-start">
-        <aside className="rounded-xl border border-[#2f4553] bg-[#1a2c38] p-3 md:w-[220px] md:flex-shrink-0">
+        <aside className="hidden rounded-xl border border-[#2f4553] bg-[#1a2c38] p-3 md:block md:w-[220px] md:flex-shrink-0">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-300">Casino Games</h2>
           <div className="space-y-2">
             {casinoGames.map((game) => (
@@ -216,7 +216,7 @@ export default function NumberGuessGamePage() {
           </div>
         </section>
 
-        <aside className="rounded-xl border border-[#2f4553] bg-[#1a2c38] p-3 md:w-[240px] md:flex-shrink-0">
+        <aside className="hidden rounded-xl border border-[#2f4553] bg-[#1a2c38] p-3 md:block md:w-[240px] md:flex-shrink-0">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-300">Other Games</h2>
           <div className="grid gap-2 text-sm">
             <Link href="/playible-online-games/stake" className="rounded-md bg-[#213743] px-3 py-2 text-left hover:bg-[#29414e]">Mines</Link>

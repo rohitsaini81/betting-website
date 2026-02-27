@@ -139,14 +139,14 @@ export function HeroSection({
 
       {/* Navbar */}
       <div className="w-full flex justify-center px-3 pt-3">
-        <div className="w-full max-w-6xl flex items-center gap-2">
-          <div className="flex flex-1 gap-2">
+        <div className="flex w-full max-w-6xl flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-1 flex-col gap-2 sm:flex-row">
             {navItems.map((item, index) => (
               item.href ? (
                 <Link
                   key={index}
                   href={item.href}
-                  className={`flex-1 rounded-lg py-2 text-center text-sm font-semibold transition
+                  className={`w-full rounded-lg px-3 py-2 text-center text-sm font-semibold transition sm:flex-1
                   ${item.active
                     ? "bg-blue-700"
                     : "bg-blue-900/70 hover:bg-blue-800"
@@ -157,7 +157,8 @@ export function HeroSection({
               ) : (
                 <button
                   key={index}
-                  className="flex-1 rounded-lg bg-blue-900/70 py-2 text-sm font-semibold transition hover:bg-blue-800"
+                  type="button"
+                  className="w-full rounded-lg bg-blue-900/70 px-3 py-2 text-sm font-semibold transition hover:bg-blue-800 sm:flex-1"
                 >
                   {item.label}
                 </button>
@@ -166,7 +167,7 @@ export function HeroSection({
           </div>
           <Link
             href="/login"
-            className="shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
+            className="w-full shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-emerald-600 sm:w-auto"
           >
             Sign In
           </Link>
